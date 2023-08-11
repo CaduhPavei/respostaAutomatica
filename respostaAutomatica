@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculadora</title>
+</head>
+<body>
+    <h1>Calculadora simples</h1>
+
+    <label for="nomeCliente">Nome do cliente</label>
+    <input type="text" id="nomeCliente">
+    
+    <label for="planoAtual">Valor atual do plano:</label>
+    <input type="number" id="planoAtual">
+
+    <label for="proposta">Proposta:</label>
+    <input type="text" id="propostaInput" list="propostaList">
+    <datalist id="propostaList">
+        <option value="Plano Total Essencial R$ 140,00">
+        <option value="Plano Total Pro R$ 200,00">
+        <option value="Plano Total 2 R$ 270,00">
+        <option value="Plano Total 3 R$ 320,00">
+        <option value="Plano Total 5 R$ 200,00">
+        <option value="Plano Total V R$ 1299,00">
+    </datalist>
+
+    <button onclick="calcular()">Calcular</button>
+
+    <p id="resultado">Resultado: </p>
+
+    <p id="textoResultado"></p>
+    
+    <label for="numeroTelefone">Número de telefone:</label>
+    <input type="text" id="numeroTelefone">
+
+    <label for="mensagemPersonalizada">Mensagem personalizada:</label>
+    <textarea id="mensagemPersonalizada" rows="13" cols="80"></textarea> 
+
+    <button onclick="iniciarConversa()">Iniciar Conversa pelo WhatsApp</button>
+
+    <script>
+
+        function calcular() {
+            var planoAtual = parseFloat(document.getElementById("planoAtual").value);
+            var propostaInput = document.getElementById("propostaInput").value;
+            var num3 = planoAtual + 100;
+            var proposta = 0;
+
+            var propostas = [
+                { label: "Plano Total Essencial R$ 140,00", value: 140 },
+                { label: "Plano Total Pro R$ 200,00", value: 200 },
+                { label: "Plano Total 2 R$ 270,00", value: 270 },
+                { label: "Plano Total 3 R$ 320,00", value: 320 },
+                { label: "Plano Total 5 R$ 200,00", value: 500 },
+                { label: "Plano Total V R$ 1299,00", value: 1299 }
+            ];
+
+            for (var i = 0; i < propostas.length; i++) {
+                if (propostas[i].label === propostaInput) {
+                    proposta = propostas[i].value;
+                    break;
+                }
+            }
+
+            var resultado = num3 - proposta;
+
+            document.getElementById("resultado").textContent = "Resultado: " + resultado + ",00 de desconto.";
+            var nomeCliente = document.getElementById("nomeCliente").value;
+
+            var textoReferencia =
+                "Olá " + nomeCliente + "!<p>" + 
+                "Me chamo Caduh Pavei e sou consultor na Loja VIVO Criciúma.<p>" +
+                "Seu plano, só no celular, é de R$ " + planoAtual.toFixed(2) + " mensais + o seu custo com a internet da sua casa, que é, em média R$ 100,00. Totalizando R$ " + num3.toFixed(2) + "<p>" +
+                "Fazendo a mudança para o plano novo, você terá uma redução de custo aproximada de R$ " + resultado.toFixed(2) + "<p>" +
+                "Além disso, seu celular passará a ter 23gb, roaming internacional nas Américas e um desconto gigantesco no aparelho em nossa loja!<p>" + 
+                "Sua banda larga terá 300mbps de velocidade no Wi-fi e a instalação do serviço é completamente gratuita!";
+
+            document.getElementById("textoResultado").innerHTML = textoReferencia;
+        }
+
+        document.getElementById("planoAtual").addEventListener("keyup", function(event) {
+            if(event.key === "Enter") {
+                calcular();
+            }
+        });
+
+        document.getElementById("propostaInput").addEventListener("keyup", function(event) {
+            if(event.key === "Enter") {
+                calcular();
+            }
+        });
+
+        function iniciarConversa() {
+            var numeroTelefone = encodeURIComponent(document.getElementById("numeroTelefone").value);
+
+            var mensagem = encodeURIComponent(document.getElementById("mensagemPersonalizada").value || document.getElementById("textoResultado").textContent);
+
+            var whatsappURL = "https://web.whatsapp.com/send?phone=" + numeroTelefone + "&text=" + mensagem;
+
+            window.open(whatsappURL, "_blank");
+        }
+    </script>   
+</body>
+</html>
